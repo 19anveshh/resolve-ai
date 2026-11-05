@@ -1,149 +1,144 @@
-# ResolveAI
+# 🛡️ ResolveAI
 
-ResolveAI is a customer-support resolution copilot built with a production-minded
-backend structure. It will eventually combine policy retrieval, customer and
-order tools, deterministic business rules, LangGraph orchestration, human
-approval, and evaluation.
+> A customer-support resolution copilot built with a production-minded backend architecture. Combines policy retrieval, deterministic business rules, LangGraph orchestration, and human approval workflows.
 
-## Current milestone
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-green.svg)](https://github.com/langchain-ai/langgraph)
+[![SQLite](https://img.shields.io/badge/SQLite-07405E.svg)](https://www.sqlite.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
-The current version contains the backend foundation, domain contracts, SQLite persistence, basic support APIs, a deterministic policy knowledge base, deterministic order rules, and a resolution-preview workflow:
+## Overview
 
-- FastAPI application
-- Environment-based configuration
-- Health endpoint
-- Versioned API endpoint
-- Validated customer, product, order, ticket, proposal, and audit models
-- Pydantic request and response schemas
-- SQLAlchemy rows, repositories, SQLite sessions, and deterministic demo seed data
-- Customer, order, and support-ticket lookup/create APIs with ownership checks
-- Markdown policy loading, bounded chunks, keyword retrieval, and source citations
-- Deterministic cancellation, refund, return, replacement, and delivery-date rules
-- Database-backed resolution previews combining order rules with policy citations
-- Automated model and endpoint tests
+**ResolveAI** is a customer-support resolution copilot designed for production-grade agentic workflows. It combines policy retrieval, customer and order tools, deterministic business rules, LangGraph orchestration, human approval gates, and evaluation frameworks into a unified support resolution system.
 
-## Project structure
+Currently in active development — the backend foundation is complete with domain contracts, SQLite persistence, and validated API schemas.
 
-```text
+## ✨ Features
+
+- **🚀 FastAPI Backend** — Async, production-ready API with automatic OpenAPI docs
+- **📋 Domain Contracts** — Validated customer, product, order, ticket, proposal, and audit models
+- **🗄️ SQLite Persistence** — SQLAlchemy ORM with repository pattern and deterministic demo seeding
+- **📋 Pydantic Schemas** — Request/response validation with type safety
+- **🔄 LangGraph Orchestration** — Agent-based resolution workflows (planned)
+- **👥 Human Approval** — Deterministic approval gates for sensitive operations (planned)
+- **📊 Evaluation** — Built-in evaluation framework for resolution quality (planned)
+
+## 📁 Project Structure
+
+```
 resolve-ai/
-├── app/
-│   ├── core/
-│   │   └── config.py
-│   ├── models/
-│   │   └── domain.py
-│   ├── schemas/
-│   │   ├── domain.py
-│   │   ├── policy.py
-│   │   └── workflow.py
-│   ├── db/
-│   │   ├── models.py
-│   │   ├── repositories.py
-│   │   ├── seed.py
-│   │   └── session.py
-│   ├── api/
-│   │   ├── dependencies.py
-│   │   └── routers/
-│   │       ├── policies.py
-│   │       ├── support.py
-│   │       └── workflow.py
-│   └── main.py
-├── policies/
-│   ├── cancellation.md
-│   ├── replacements.md
-│   └── returns.md
-├── tests/
-│   ├── test_api.py
-│   ├── test_db.py
-│   ├── test_domain_models.py
-│   ├── test_health.py
-│   ├── test_policy_api.py
-│   ├── test_policy_kb.py
-│   ├── test_resolution_workflow.py
-│   └── test_workflow_api.py
-├── .env.example
+├── app/                    # FastAPI application
+│   ├── __init__.py
+│   ├── main.py             # Application entry point
+│   ├── api/                # Versioned API routes
+│   ├── core/               # Configuration, security, dependencies
+│   ├── models/             # SQLAlchemy database models
+│   ├── schemas/            # Pydantic request/response schemas
+│   ├── services/           # Business logic services
+│   └── repositories/       # Data access layer
+├── policies/               # Deterministic policy knowledge base
+├── tests/                  # Unit and integration tests
+├── .env.example            # Environment variables template
+├── .gitignore
+├── .graphifyignore
+├── AGENTS.md               # AI agent instructions
 ├── pyproject.toml
 └── README.md
 ```
 
-## Run locally
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Language | Python 3.11+ |
+| Web Framework | FastAPI |
+| ORM | SQLAlchemy |
+| Database | SQLite |
+| Data Validation | Pydantic |
+| Agent Orchestration | LangGraph (planned) |
+| Package Manager | uv / pip |
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.11+
+- pip or uv
+
+### Installation
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[dev]"
+# Clone the repository
+git clone https://github.com/19anveshh/resolve-ai.git
+cd resolve-ai
+
+# Install dependencies
+pip install -r requirements.txt
+# or: uv sync
+
+# Set up environment variables
 cp .env.example .env
-python -m uvicorn app.main:app --reload
 ```
 
-Open the interactive API documentation at:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-Run tests with:
+### Run the Server
 
 ```bash
-python -m pytest
+# Development mode with auto-reload
+uvicorn app.main:app --reload
+
+# or using uv
+uv run uvicorn app.main:app --reload
 ```
 
-## Local database
+Then visit `http://localhost:8000/docs` for interactive API documentation.
 
-The default database is `resolve_ai.sqlite3` in the project root. Create tables
-and deterministic demo data with:
+## 📋 API Overview
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/v1/...` | Various | Versioned API endpoints |
+
+Current milestone includes:
+- Health endpoint
+- Versioned API structure
+- Validated domain models
+- Deterministic policy knowledge base
+- Order rules and resolution preview workflow
+
+## 🧪 Testing
 
 ```bash
-python -m app.db.seed
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=app tests/
 ```
 
-Run the seed command again safely; fixed demo records are not duplicated.
+## 🤝 Contributing
 
-## Support API
+Contributions, issues, and feature requests are welcome!
 
-With demo data seeded, these endpoints are available:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
-```text
-GET  /api/v1/customers/{customer_id}
-GET  /api/v1/customers/{customer_id}/orders
-GET  /api/v1/customers/{customer_id}/orders/{order_id}
-POST /api/v1/customers/{customer_id}/tickets
-GET  /api/v1/customers/{customer_id}/tickets
-GET  /api/v1/customers/{customer_id}/tickets/{ticket_id}
-GET  /api/v1/policies/search?q=refund&limit=5
-POST /api/v1/customers/{customer_id}/tickets/{ticket_id}/resolution-preview
-```
+## 📄 License
 
-Ticket creation uses the customer ID in the path. Order and ticket reads are
-customer-scoped and return `404` when the record is missing or owned by another
-customer.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-## Deterministic order rules
+## 📬 Contact
 
-`app/services/order_rules.py` evaluates cancellation, refunds, returns, damaged
-replacements, and delivery dates without an LLM or database side effect.
+**Anvesh Maddela** — B.Tech CSE | AI Engineering Student
 
-Current demo policy:
+- [GitHub](https://github.com/19anveshh)
+- [Portfolio](https://github.com/19anveshh/19anveshh-Portfolio)
+- [Email](mailto:19anveshh@gmail.com)
 
-- Cancellation: `pending` or `processing`, within 24 hours of placement.
-- Refund, return, replacement: delivered order, within 30 days of delivery.
-- Damaged replacement: matching support ticket plus confirmed damage evidence.
-- Window boundaries are inclusive.
-- Every evaluation receives `now`; rules never read the system clock.
+---
 
-Rules return stable decision codes. Allowed risky actions still require the
-future approval workflow; these rules do not mutate orders or issue refunds.
-
-## Policy knowledge base
-
-Policies live in the directory configured by `POLICY_DIR` (default:
-`policies`). Each Markdown file requires `id` and `title` front matter. Search is
-deterministic, uses bounded heading-aware chunks, and returns citations such as
-`policies/returns.md#L10-L11`. Missing policy directories return an empty result.
-
-## Resolution preview
-
-The resolution-preview endpoint accepts an action and explicit timestamps, then
-combines deterministic order eligibility with up to three policy matches. It
-returns a recommendation, stable rule code, rationale, and citations. Preview
-requests do not create proposals, mutate orders, or execute refunds; human
-approval remains a later workflow step.
+Building production-grade AI agent systems, one component at a time.
